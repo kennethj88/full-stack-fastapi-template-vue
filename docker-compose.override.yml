@@ -95,13 +95,18 @@ services:
   frontend:
     restart: "no"
     ports:
-      - "5173:80"
+      #- "3000:80"
+      - "3000:3000"
     build:
       context: ./frontend
       args:
         - VITE_API_URL=http://localhost:8000
         - NODE_ENV=development
-
+    environment:
+      HOST: 0.0.0.0
+      NODE_ENV: development
+    volumes:
+     - ./frontend:/app
   playwright:
     build:
       context: ./frontend

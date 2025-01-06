@@ -4,9 +4,13 @@ WORKDIR /app
 
 COPY package*.json /app/
 
-RUN npm install
+RUN npm install -g pnpm
 
-RUN npx -y playwright install --with-deps
+RUN pnpm create playwright
+
+RUN pnpm install playwright
+
+RUN pnpm exec playwright install --with-deps
 
 COPY ./ /app/
 

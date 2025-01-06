@@ -1,23 +1,34 @@
-# Stage 0, "build-stage", based on Node.js, to build and compile the frontend
-FROM node:20 AS build-stage
+ARG NODE_VERSION=20.18.0
+ARG NODE_ENV
+ARG VITE_API_URL
 
+# Create build stage
+FROM node:${NODE_VERSION}-slim AS build-stage
+
+# Enable pnpm
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+RUN corepack enable
+
+RUN apt-get update && apt-get install -y procps && rm -rf /var/lib/apt/lists/*
+
+# Set the working directory inside the container
 WORKDIR /app
 
-COPY package*.json /app/
+# Copy package.json and pnpm-lock.yaml files to the working directory
+COPY ./package.json /app/
+COPY ./pnpm-lock.yaml /app/
 
-RUN npm install
+## Install dependencies
+RUN pnpm install --shamefully-hoist
+RUN pnpm add axios
 
-COPY ./ /app/
+# Copy the rest of the application files to the working directory
+#COPY . ./
 
-ARG VITE_API_URL=${VITE_API_URL}
+# Build the application
 
-RUN npm run build
+EXPOSE 3000
 
-
-# Stage 1, based on Nginx, to have only the compiled app, ready for production with Nginx
-FROM nginx:1
-
-COPY --from=build-stage /app/dist/ /usr/share/nginx/html
-
-COPY ./nginx.conf /etc/nginx/conf.d/default.conf
-COPY ./nginx-backend-not-found.conf /etc/nginx/extra-conf.d/backend-not-found.conf
+CMD ["pnpm","dev","-o"]
+# Start the application

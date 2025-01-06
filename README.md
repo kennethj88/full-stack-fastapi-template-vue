@@ -9,9 +9,15 @@
     - 🧰 [SQLModel](https://sqlmodel.tiangolo.com) for the Python SQL database interactions (ORM).
     - 🔍 [Pydantic](https://docs.pydantic.dev), used by FastAPI, for the data validation and settings management.
     - 💾 [PostgreSQL](https://www.postgresql.org) as the SQL database.
-- 🚀 [React](https://react.dev) for the frontend.
+- 🚀 [React](https://react.dev) for the frontend.   #TODO Swap with vue nuxt
     - 💃 Using TypeScript, hooks, Vite, and other parts of a modern frontend stack.
     - 🎨 [Chakra UI](https://chakra-ui.com) for the frontend components.
+    - 🤖 An automatically generated frontend client.
+    - 🧪 [Playwright](https://playwright.dev) for End-to-End testing.
+    - 🦇 Dark mode support.
+- 🚀 [Vue](https://vue.js) for the frontend.
+    - 💃 Using TypeScript, nuxt, and other parts of a modern frontend stack.
+    - 🎨 [Daisy UI](https://daisyui.com) for the frontend components.
     - 🤖 An automatically generated frontend client.
     - 🧪 [Playwright](https://playwright.dev) for End-to-End testing.
     - 🦇 Dark mode support.

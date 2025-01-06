@@ -1,0 +1,55 @@
+ARG NODE_VERSION=20.18.0
+ARG NODE_ENV
+ARG VITE_API_URL
+
+# Create build stage
+FROM node:${NODE_VERSION}-slim AS build-stage
+
+# Enable pnpm
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+RUN corepack enable
+
+RUN apt-get update && apt-get install -y procps && rm -rf /var/lib/apt/lists/*
+
+# Set the working directory inside the container
+WORKDIR /app
+
+# Copy package.json and pnpm-lock.yaml files to the working directory
+COPY ./package.json /app/
+COPY ./pnpm-lock.yaml /app/
+
+## Install dependencies
+RUN pnpm install --shamefully-hoist
+
+# Copy the rest of the application files to the working directory
+COPY . ./
+
+# Build the application
+RUN pnpm run build
+
+# Create a new stage for the production image
+FROM node:${NODE_VERSION}-slim
+
+RUN npm install -g pnpm
+RUN npm install -g pm2
+# Set the working directory inside the container
+WORKDIR /app
+
+# Copy the output from the build stage to the working directory
+COPY --from=build-stage /app/.output ./
+#COPY ./package.json /app/
+#COPY ./pnpm-lock.yaml /app/
+
+# Install dependencies
+#RUN npm install
+
+# Define environment variables
+ENV HOST=0.0.0.0 NODE_ENV=${NODE_ENV}
+ENV NODE_ENV=${NODE_ENV}
+
+# Expose the port the application will run on
+EXPOSE 3000
+
+# Start the application
+CMD ["node","/app/server/index.mjs"] #prod
