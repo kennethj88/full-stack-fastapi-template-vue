@@ -28,7 +28,8 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     public: {
-      apiUrl: process.env.VITE_API_URL || 'http://localhost:8000'
+      apiUrl: process.env.VITE_API_URL || 'http://localhost:8000',
+      googleClientId: process.env.GOOGLE_CLIENT_ID
     }
   },
   colorMode: {

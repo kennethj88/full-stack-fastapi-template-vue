@@ -59,5 +59,18 @@ export const authApi = {
       new_password: newPassword
     })
     return response.data
+  },
+
+  async googleLogin(token: string) {
+    const { data } = await useAxiosInstance().post('/api/v1/auth/google', { token })
+    return data
+  },
+  
+  async linkGoogleAccount(token: string, password: string) {
+    const { data } = await useAxiosInstance().post('/api/v1/auth/google/link', {
+      token,
+      password
+    })
+    return data
   }
 } 

@@ -1,4 +1,4 @@
-FROM python:3.10
+FROM python:3.12
 
 ENV PYTHONUNBUFFERED=1
 
@@ -25,19 +25,23 @@ ENV UV_LINK_MODE=copy
 RUN --mount=type=cache,target=/root/.cache/uv \
     --mount=type=bind,source=uv.lock,target=uv.lock \
     --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
-    uv sync --frozen --no-install-project
+    uv pip compile pyproject.toml -o requirements.txt 
+    #uv sync --frozen --no-install-project 
 
-ENV PYTHONPATH=/app
+RUN pip install -r requirements.txt
 
-COPY ./scripts /app/scripts
-
+# Copy application files
+COPY ./app/scripts /app/scripts
 COPY ./pyproject.toml ./uv.lock ./alembic.ini /app/
+COPY ./app/backend_pre_start.py /app/
+COPY ./app/initial_data.py /app/
+COPY ./app/src /app/src
+COPY ./app/alembic /app/alembic
 
-COPY ./app /app/app
-
+ENV PYTHONPATH=/app/
 # Sync the project
 # Ref: https://docs.astral.sh/uv/guides/integration/docker/#intermediate-layers
 RUN --mount=type=cache,target=/root/.cache/uv \
     uv sync
 
-CMD ["fastapi", "run", "--workers", "4", "app/main.py"]
+CMD ["fastapi", "run", "--workers", "4", "app/src/main.py"]

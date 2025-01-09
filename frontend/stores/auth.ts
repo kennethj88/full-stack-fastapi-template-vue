@@ -143,6 +143,59 @@ export const useAuthStore = defineStore('auth', () => {
     navigateTo('/login')
     return 
   }
+
+  async function googleLogin(token: string) {
+    loading.value = true
+    error.value = null
+    
+    try {
+      const response = await authApi.googleLogin(token)
+      
+      if (response.requires_password) {
+        return response
+      }
+      
+      if (response.access_token) {
+        setToken(response.access_token)
+        const userData = await authApi.getCurrentUser()
+        if (userData) {
+          setUser(userData)
+          return true
+        }
+      }
+      return false
+    } catch (error: any) {
+      error.value = error.response?.data?.detail || 'An error occurred during Google login'
+      return false
+    } finally {
+      loading.value = false
+    }
+  }
+
+  async function linkGoogleAccount(token: string, password: string) {
+    loading.value = true
+    error.value = null
+    
+    try {
+      const response = await authApi.linkGoogleAccount(token, password)
+      
+      if (response.access_token) {
+        setToken(response.access_token)
+        const userData = await authApi.getCurrentUser()
+        if (userData) {
+          setUser(userData)
+          return true
+        }
+      }
+      return false
+    } catch (error: any) {
+      error.value = error.response?.data?.detail || 'An error occurred while linking account'
+      return false
+    } finally {
+      loading.value = false
+    }
+  }
+
   // ... existing signup, login, refreshUser, and logout functions ...
   
   return {
@@ -165,7 +218,9 @@ export const useAuthStore = defineStore('auth', () => {
     setUser,
     updateUser,
     setToken,
-    cleanUser
+    cleanUser,
+    googleLogin,
+    linkGoogleAccount
   }
 },
 {

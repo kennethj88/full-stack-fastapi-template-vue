@@ -74,13 +74,13 @@ that means that you are in a `bash` session inside your container, as a `root` u
 There you can use the `fastapi run --reload` command to run the debug live reloading server.
 
 ```console
-$ fastapi run --reload app/main.py
+$ fastapi run --reload src/main.py
 ```
 
 ...it will look like:
 
 ```console
-root@7f2607af31c3:/app# fastapi run --reload app/main.py
+root@7f2607af31c3:/app# fastapi run --reload src/main.py
 ```
 
 and then hit enter. That runs the live reloading server that auto reloads when it detects code changes.

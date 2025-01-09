@@ -1,8 +1,8 @@
-
 <script setup lang="ts">
 import { ref, reactive, onMounted} from 'vue'
 import { useAuthStore } from '~/stores/auth'
 import logo from '@/public/assets/images/fastapi-logo.svg'
+import GoogleButton from './GoogleButton.vue'
 
 
 
@@ -78,6 +78,18 @@ const handleSubmit = async (event: Event) => {
 
   
 }
+
+const showPasswordModal = ref(false)
+const pendingGoogleData = ref(null)
+
+interface GooglePasswordData {
+  email: string
+  googleToken: string
+}
+const handlePasswordRequired = (data: GooglePasswordData) => {
+  pendingGoogleData.value = data as unknown as null
+  showPasswordModal.value = true
+}
 </script>
 
 <template>
@@ -127,6 +139,21 @@ const handleSubmit = async (event: Event) => {
           Don't have an account? <nuxt-link to="/sign-up">Sign up</nuxt-link>
         </p>
       </form>
+
+      <div class="mt-6">
+        <div class="relative">
+          <div class="absolute inset-0 flex items-center">
+            <div class="w-full border-t border-gray-300" />
+          </div>
+          <div class="relative flex justify-center text-sm">
+            <span class="px-2 bg-white text-gray-500">Or continue with</span>
+          </div>
+        </div>
+
+        <div class="mt-6">
+          <GoogleButton @requires-password="handlePasswordRequired" />
+        </div>
+      </div>
     </div>
   </template>
   

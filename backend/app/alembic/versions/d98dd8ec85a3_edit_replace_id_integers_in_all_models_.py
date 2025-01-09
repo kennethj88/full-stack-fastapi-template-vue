@@ -7,7 +7,6 @@ Create Date: 2024-07-19 04:08:04.000976
 """
 from alembic import op
 import sqlalchemy as sa
-import sqlmodel.sql.sqltypes
 from sqlalchemy.dialects import postgresql
 
 
@@ -53,6 +52,7 @@ def upgrade():
 
     # Recreate foreign key constraint
     op.create_foreign_key('item_owner_id_fkey', 'item', 'user', ['owner_id'], ['id'])
+
 
 def downgrade():
     # Reverse the upgrade process
