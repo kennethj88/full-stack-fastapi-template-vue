@@ -5,7 +5,11 @@ const auth   = useAuthStore()
 // Initialize auth store
 onBeforeMount(async () => {
   if (import.meta.client && !auth.initialized) {
-    await auth.init()
+    try {
+      await auth.init()
+    } catch (error) {
+      console.error('Auth initialization error:', error)
+    }
   }
 })
 

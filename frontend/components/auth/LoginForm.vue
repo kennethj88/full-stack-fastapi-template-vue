@@ -51,6 +51,7 @@ const validateForm = () => {
   return isValid
 }
 
+ 
 const handleSubmit = async (event: Event) => {
   console.log('form submitted')
   event.preventDefault()
@@ -151,7 +152,7 @@ const handlePasswordRequired = (data: GooglePasswordData) => {
         </div>
 
         <div class="mt-6">
-          <GoogleButton @requires-password="handlePasswordRequired" />
+          <GoogleButton @login-success="emit('login-success')" @requires-password="handlePasswordRequired" />
         </div>
       </div>
     </div>

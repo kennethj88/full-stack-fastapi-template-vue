@@ -1,4 +1,5 @@
 import uuid
+import logging
 from typing import Any
 
 from sqlalchemy import select
@@ -8,10 +9,15 @@ from src.core.security import get_password_hash, verify_password
 from src.users.models import User
 from src.users.schemas import UserCreate, UserUpdate
 
+# Add this near the top of the file with other imports
+logger = logging.getLogger(__name__)
+
 
 async def get_user_by_email(session: AsyncSession, email: str) -> User | None:
     """Get a user by email."""
+    logger.info(f"Find user: {email}") 
     result = await session.execute(select(User).where(User.email == email))
+    logger.info(f"Find user result:  -- {result}") 
     return result.scalar_one_or_none()
 
 

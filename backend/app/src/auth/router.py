@@ -1,6 +1,6 @@
+import logging
 from datetime import timedelta
 from typing import Annotated, Any
-
 from fastapi import APIRouter, Depends, HTTPException, Path, status
 from fastapi.responses import HTMLResponse
 from fastapi.security import OAuth2PasswordRequestForm
@@ -8,7 +8,8 @@ from google.oauth2 import id_token
 from google.auth.transport import requests
 from sqlalchemy import select
 
-from src.users import service
+from src.users import service as user_service
+from . import service
 from src.users.schemas import UserPublic
 from src.core.schemas import Message
 from src.deps import (
@@ -31,6 +32,8 @@ from src.utils import (
 
 from .models import SocialAccount
 from .schemas import Token,NewPassword,GoogleToken, GoogleLinkRequest, GoogleAuthResponse
+logger = logging.getLogger(__name__)
+
 
 router = APIRouter()
 
@@ -39,24 +42,21 @@ router = APIRouter()
 async def google_auth(
     token_data: GoogleToken,
     session: AsyncSessionDep,
-    current_user: User | None = Depends(get_optional_current_user),  # This is correct syntax
+    current_user: User | None = Depends(get_optional_current_user),
 ) -> GoogleAuthResponse:
     """Authenticate or register a user with Google OAuth!"""
     try:
-        # Verify Google token
-        idinfo = id_token.verify_oauth2_token(
-            token_data.token, 
-            requests.Request(), 
-            settings.GOOGLE_CLIENT_ID
-        )
-        
-        if idinfo['iss'] not in ['accounts.google.com', 'https://accounts.google.com']:
-            raise HTTPException(status_code=400, detail="Invalid issuer")
+        # Get user info from Google
+        credentials = await security.get_google_user_info(token_data.token)
+        if not credentials:
+            raise HTTPException(status_code=400, detail="Invalid token or failed to get user info")
             
-        # Extract user info from Google token
-        google_user_id = idinfo['sub']
-        email = idinfo['email']
-        name = idinfo.get('name')
+        # Extract user info from credentials
+        google_user_id = credentials['sub']
+        email = credentials['email']
+        name = credentials.get('name')
+        
+        logger.warning(f"Google credentials: {credentials}")
         
         # Check if social account exists
         result = await session.execute(
@@ -69,7 +69,7 @@ async def google_auth(
         
         if social_account:
             # Social account exists - log user in
-            access_token = create_access_token(data={"sub": str(social_account.user_id)})
+            access_token = create_access_token(str(social_account.user_id))
             return GoogleAuthResponse(access_token=access_token, token_type="bearer")
             
         # Check if email exists
@@ -123,7 +123,7 @@ async def google_auth(
         session.add(social_account)
         await session.commit()
         
-        access_token = create_access_token(data={"sub": str(user.id)})
+        access_token = create_access_token(str(user.id))
         return GoogleAuthResponse(access_token=access_token, token_type="bearer")
             
     except ValueError as e:
@@ -208,7 +208,7 @@ async def recover_password(
     """
     Password Recovery
     """
-    user = await service.get_user_by_email(session=session, email=email)
+    user = await user_service.get_user_by_email(session=session, email=email)
 
     if not user:
         raise HTTPException(
@@ -235,7 +235,7 @@ async def reset_password(session: AsyncSessionDep, body: NewPassword) -> Message
     email = verify_password_reset_token(token=body.token)
     if not email:
         raise HTTPException(status_code=400, detail="Invalid token")
-    user = await service.get_user_by_email(session=session, email=email)
+    user = await user_service.get_user_by_email(session=session, email=email)
     if not user:
         raise HTTPException(
             status_code=404,
@@ -262,7 +262,7 @@ async def recover_password_html_content(
     """
     HTML Content for Password Recovery
     """
-    user = await service.get_user_by_email(session=session, email=email)
+    user = await user_service.get_user_by_email(session=session, email=email)
 
     if not user:
         raise HTTPException(

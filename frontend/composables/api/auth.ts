@@ -8,7 +8,7 @@ export const authApi = {
     formData.append('password', credentials.password)
     
     const { data } = await useAxiosInstance().post(
-      'api/v1/login/access-token',
+      'api/v1/auth/login/access-token',
       formData,
       {
         headers: {

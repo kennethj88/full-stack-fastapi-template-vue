@@ -5,6 +5,7 @@ import { useToast } from '@/composables/useToast'
 const auth = useAuthStore()
 const toast = useToast()
 const emit = defineEmits<{
+  'login-success': [],
   'requires-password': [{ email: string, googleToken: string }]
 }>()
 
@@ -48,6 +49,7 @@ const googleLogin = async () => {
             message: 'Successfully logged in with Google', 
             type: 'success' 
           })
+          emit('login-success')
         } catch (error: any) {
           console.error('API error:', error)
           toast.showToast({ 

@@ -37,6 +37,7 @@ export const useAuthStore = defineStore('auth', () => {
   const setToken = (accessToken: string) => {
     const access = useCookie('access_token')
     access.value = accessToken
+    console.log('auth store: set token',access.value)
   }
 
   const cleanUser = () => {
@@ -86,6 +87,7 @@ export const useAuthStore = defineStore('auth', () => {
     
     try {
         const response = await authApi.login(payload)
+        console.log('auth store: login requested',response)
         if (response?.access_token) {
             setToken(response.access_token)
             const userData = await authApi.getCurrentUser()

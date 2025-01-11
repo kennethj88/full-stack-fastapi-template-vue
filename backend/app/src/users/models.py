@@ -7,8 +7,11 @@ from sqlalchemy.dialects.postgresql import UUID
 from src.core.models import BaseModel
 
 if TYPE_CHECKING:
-    from ..items.models import Item
-    from ..auth.models import SocialAccount
+    from src.items.models import Item
+    from src.auth.models import SocialAccount
+else:
+    Item = "Item"  # type: ignore
+    SocialAccount = "SocialAccount"  # type: ignore
 
 class User(BaseModel):
     __tablename__ = "user"

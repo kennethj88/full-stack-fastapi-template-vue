@@ -1,3 +1,4 @@
+import logging
 import uuid
 from typing import Any
 
@@ -25,6 +26,7 @@ from .schemas import (
 )
 from src.utils import generate_new_account_email, send_email
 
+logger = logging.getLogger(__name__)
 router = APIRouter()
 
 
@@ -143,19 +145,23 @@ def delete_user_me(session: AsyncSessionDep, current_user: CurrentUser) -> Any:
     return Message(message="User deleted successfully")
 
 
+
 @router.post("/signup", response_model=UserPublic)
-def register_user(session: AsyncSessionDep, user_in: UserRegister) -> Any:
+async def register_user(session: AsyncSessionDep, user_in: UserRegister) -> Any:
     """
     Create new user without the need to be logged in.
     """
-    user = service.get_user_by_email(session=session, email=user_in.email)
+    logger.info(f"Find user: {user_in.email} -- {user_in}") 
+    user = await service.get_user_by_email(session=session, email=user_in.email)
+    logger.info(f"user: {user}") 
     if user:
         raise HTTPException(
             status_code=400,
             detail="The user with this email already exists in the system",
         )
-    user_create = UserCreate.model_validate(user_in)
-    user = service.create_user(session=session, user_create=user_create)
+    user_data = user_in.model_dump()
+    user_create = UserCreate.model_validate(user_data)
+    user = await service.create_user(session=session, user_create=user_create)
     return user
 
 

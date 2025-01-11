@@ -9,8 +9,16 @@ export const useAxiosInstance = () => {
     timeout: 10000,
   });
 
-  // Add request interceptor for debugging
+  // Add request interceptor for adding auth token and debugging
   instance.interceptors.request.use((config) => {
+    // Get access token from cookie
+    const access = useCookie('access_token')
+    
+    // If token exists, add it to headers
+    if (access.value) {
+      config.headers.Authorization = `Bearer ${access.value}`
+    }
+
     console.log('API Request:', {
       method: config.method,
       url: config.url,
