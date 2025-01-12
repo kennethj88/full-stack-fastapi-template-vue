@@ -9,7 +9,6 @@ export default defineNuxtConfig({
   },
   modules: [
     '@pinia/nuxt',
-    '@pinia-plugin-persistedstate/nuxt',
     '@nuxtjs/tailwindcss',
     '@vueuse/nuxt',
     '@nuxtjs/color-mode',
@@ -35,7 +34,12 @@ export default defineNuxtConfig({
   colorMode: {
     classSuffix: ''
   },
-  
+  tailwindcss: {
+    cssPath: '~/assets/css/tailwind.css',
+    exposeConfig: true,
+    viewer: true,
+    // and more...
+  },
   app: {
     head: {
       title: 'FastAPI + Nuxt3 Starter',

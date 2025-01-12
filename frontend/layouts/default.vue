@@ -48,6 +48,6 @@
 import { useAuthStore } from '@/stores/auth'
 
 const authStore = useAuthStore()
-//console.log('layout hydrated',authStore.hydrated)
-console.log('layout authstore user', authStore.user)
+console.log('layout initialized',authStore.initialized)
+//console.log('layout authstore user', authStore.user)
 </script>
