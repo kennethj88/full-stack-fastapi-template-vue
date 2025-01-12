@@ -1,9 +1,9 @@
-<script setup>
+<script setup lang="ts">
 import { useAuthStore } from '@/stores/auth'
-const auth   = useAuthStore()
+const auth = useAuthStore()
 
 // Initialize auth store
-onBeforeMount(async () => {
+onMounted(async () => {
   if (import.meta.client && !auth.initialized) {
     try {
       await auth.init()
@@ -12,13 +12,14 @@ onBeforeMount(async () => {
     }
   }
 })
-
 </script>
 
-
-
 <template>
-  <NuxtLayout>
-    <NuxtPage />
-  </NuxtLayout>
+  <div>
+    <NuxtLayout>
+      <!-- start nuext page slot-->
+      <NuxtPage />
+        <!-- end nuext page slot-->
+    </NuxtLayout>
+  </div>
 </template>

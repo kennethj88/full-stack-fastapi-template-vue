@@ -1,3 +1,20 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "_root.css";
+
+/* admin-theme Styling */
+@import "basetheme/_animation.css";
+@import "basetheme/_components.css";
+@import "basetheme/_forms.css";
+@import "basetheme/_layout.css";
+
+/* Plugin Overriding */
+@import "plugins/_filepond.css";
+@import "plugins/_apexcharts.css";
+@import "plugins/_select.css";
+
+:root {
+    --body-font-family: "DM Sans", sans-serif;
+}
+
+body {
+    font-family: var(--body-font-family), serif;
+}

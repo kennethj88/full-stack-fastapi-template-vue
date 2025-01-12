@@ -9,7 +9,8 @@
   import LoginForm from '@/components/auth/LoginForm.vue'
   import logo from '@/public/assets/images/fastapi-logo.svg'
   
- 
+
+
 </script>
   
 <style>

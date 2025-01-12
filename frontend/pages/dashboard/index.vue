@@ -5,6 +5,10 @@
 
 import { useAuthStore } from '~/stores/auth'
 
+definePageMeta({
+    layout: 'dashboard'
+  })
+  
 const authStore = useAuthStore()
 </script>
 

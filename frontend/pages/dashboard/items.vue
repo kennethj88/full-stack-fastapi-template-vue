@@ -2,9 +2,9 @@
 import { ref, onMounted } from 'vue'
 
 definePageMeta({
+    layout: 'dashboard',
     middleware: 'auth' // this should match the name of the file inside the middleware directory 
 })
-
 const authStore = useAuthStore()
 
 import type { Item } from '~/types'
