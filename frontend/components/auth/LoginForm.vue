@@ -3,6 +3,7 @@ import { ref, reactive, onMounted} from 'vue'
 import { useAuthStore } from '~/stores/auth'
 import logo from '@/public/assets/images/fastapi-logo.svg'
 import GoogleButton from './GoogleButton.vue'
+import BaseInput from '~/components/ui/BaseInput.vue'
 
 
 
@@ -101,29 +102,28 @@ const handlePasswordRequired = (data: GooglePasswordData) => {
       <form @submit.prevent="handleSubmit">
         <div class="form-group">
           <label for="username">Email</label>
-          <input
+          <BaseInput
             v-model="form.email"
             type="email"
             id="username"
             required
             placeholder="Email"
             autocomplete="email"
+            :error="errors.email"
           />
-          <span v-if="errors.email">{{ errors.email }}</span>
         </div>
         <div class="form-group">
           <label for="password">Password</label>
-          <input
+          <BaseInput
             v-model="form.password"
             :type="showPassword ? 'text' : 'password'"
             id="password"
             required
             placeholder="Password"
-             autocomplete="current-password"
+            autocomplete="current-password"
+            :error="errors.password"
           />
-          <button type="button" 
-                   class="show-password-btn"
-                  @click.stop="toggleShowPassword">
+          <button type="button" class="show-password-btn" @click.stop="toggleShowPassword">
             {{ showPassword ? 'Hide' : 'Show' }} password
           </button>
         </div>

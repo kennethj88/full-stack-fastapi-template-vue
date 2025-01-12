@@ -2,6 +2,17 @@
 import { useAuthStore } from '@/stores/auth'
 const auth = useAuthStore()
 
+useHead({
+  script: [
+    {
+      src: 'https://cloud.umami.is/script.js',
+      'data-website-id': useRuntimeConfig().public.umamiWebsiteId,
+      async: true,
+      defer: true,
+    }
+  ]
+})
+
 // Initialize auth store
 onMounted(async () => {
   if (import.meta.client && !auth.initialized) {

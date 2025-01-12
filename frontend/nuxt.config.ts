@@ -28,7 +28,8 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       apiUrl: process.env.VITE_API_URL || 'http://localhost:8000',
-      googleClientId: process.env.GOOGLE_CLIENT_ID
+      googleClientId: process.env.GOOGLE_CLIENT_ID,
+      umamiWebsiteId: process.env.UMAMI_WEBSITE_ID
     }
   },
   colorMode: {
@@ -51,6 +52,11 @@ export default defineNuxtConfig({
   },
   routeRules: {
     '/dashboard/**': { ssr: false },
+  },
+  nitro: {
+    prerender: {
+      // Customize which routes get preloaded
+      routes: ['/']
+    }
   }
-
 })
