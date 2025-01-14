@@ -7,7 +7,6 @@
   </div>
 </template>
 
-  
 <script setup lang="ts">
   import { ref } from 'vue'
   import LoginForm from '@/components/auth/LoginForm.vue'
@@ -26,7 +25,7 @@
       }
   }
 </script>
-  
+
 <style>
   /* Add your styles here */
   #app {

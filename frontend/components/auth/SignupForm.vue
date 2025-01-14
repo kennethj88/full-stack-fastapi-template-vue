@@ -6,7 +6,7 @@
     <form @submit.prevent="handleSubmit">
       <div class="form-group">
         <label for="fullName">Full Name</label>
-        <input
+        <BaseInput
           v-model="form.fullName"
           type="text"
           id="fullName"
@@ -17,7 +17,7 @@
 
       <div class="form-group">
         <label for="email">Email</label>
-        <input
+        <BaseInput
           v-model="form.email"
           type="email"
           id="email"
@@ -29,7 +29,7 @@
 
       <div class="form-group">
         <label for="password">Password</label>
-        <input
+        <BaseInput
           v-model="form.password"
           :type="showPassword ? 'text' : 'password'"
           id="password"
@@ -48,7 +48,7 @@
 
       <button 
         type="submit" 
-        class="submit-btn"
+        class="btn btn-primary submit-btn"
         :disabled="authStore.loading"
       >
         {{ authStore.loading ? 'Creating Account...' : 'Create Account' }}
@@ -67,6 +67,7 @@
 
 <script setup lang="ts">
 import { ref, reactive } from 'vue'
+import BaseInput from '~/components/ui/BaseInput.vue'
 import { useAuthStore } from '~/stores/auth'
 
 const logo = '/images/fastapi-logo.svg'
@@ -142,81 +143,5 @@ const handleSubmit = async () => {
 </script>
 
 <style scoped>
-.form-container {
-  width: 100%;
-  max-width: 400px;
-  padding: 2rem;
-}
 
-.logo {
-  max-width: 200px;
-  margin: 0 auto 2rem;
-  display: block;
-}
-
-h2 {
-  text-align: center;
-  margin-bottom: 2rem;
-}
-
-.form-group {
-  margin-bottom: 1rem;
-}
-
-label {
-  display: block;
-  margin-bottom: 0.5rem;
-}
-
-input {
-  width: 100%;
-  padding: 0.5rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-.show-password-btn {
-  background: none;
-  border: none;
-  color: #4f46e5;
-  padding: 0.25rem 0;
-  cursor: pointer;
-  font-size: 0.875rem;
-}
-
-.submit-btn {
-  width: 100%;
-  padding: 0.75rem;
-  background-color: #4f46e5;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  margin-top: 1rem;
-}
-
-.submit-btn:disabled {
-  background-color: #9ca3af;
-  cursor: not-allowed;
-}
-
-.error {
-  color: #ef4444;
-  font-size: 0.875rem;
-  margin-top: 0.5rem;
-}
-
-.login-link {
-  text-align: center;
-  margin-top: 1rem;
-}
-
-a {
-  color: #4f46e5;
-  text-decoration: none;
-}
-
-a:hover {
-  text-decoration: underline;
-}
 </style> 

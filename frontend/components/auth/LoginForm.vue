@@ -95,130 +95,94 @@ const handlePasswordRequired = (data: GooglePasswordData) => {
 </script>
 
 <template>
-    <div class="login-container">
-    <div class="text-green-500">Component Mounted!</div>
-    
-      <img :src="logo" alt="Logo" class="logo" />
-      <form @submit.prevent="handleSubmit">
-        <div class="form-group">
-          <label for="username">Email</label>
-          <BaseInput
-            v-model="form.email"
-            type="email"
-            id="username"
-            required
-            placeholder="Email"
-            autocomplete="email"
-            :error="errors.email"
-          />
-        </div>
-        <div class="form-group">
-          <label for="password">Password</label>
-          <BaseInput
-            v-model="form.password"
-            :type="showPassword ? 'text' : 'password'"
-            id="password"
-            required
-            placeholder="Password"
-            autocomplete="current-password"
-            :error="errors.password"
-          />
-          <button type="button" class="show-password-btn" @click.stop="toggleShowPassword">
-            {{ showPassword ? 'Hide' : 'Show' }} password
+  <div class="login-container flex flex-col items-stretch p-6 md:p-8">
+    <h3 class="mt-8 text-center text-xl font-semibold md:mt-12">Login</h3>
+    <h3 class="mt-2 text-center text-sm text-base-content/70">
+      Seamless Access, Secure Connection: Your Gateway to a Personalized Experience.
+    </h3>
+
+    <form @submit.prevent="handleSubmit" class="mt-6 md:mt-10">
+      <div class="form-control">
+        <BaseInput
+          labelTxt="Email Address"
+          iconifyIcon="lucide:mail"
+          v-model="form.email"
+          type="email"
+          id="username"
+          required
+          placeholder="Email Address"
+          autocomplete="email"
+          :error="errors.email"
+        />
+      </div>
+
+      <div class="form-control mt-3">
+        <BaseInput
+          labelTxt="Password"
+          iconifyIcon="lucide:key-round"
+          v-model="form.password"
+          :type="showPassword ? 'text' : 'password'"
+          id="password"
+          required
+          placeholder="Password"
+          autocomplete="current-password"
+          :error="errors.password"
+        >
+          <button 
+            type="button" 
+            class="btn btn-circle btn-ghost btn-xs hover:bg-base-content/10" 
+            @click.stop="toggleShowPassword"
+          >
+            <iconify-icon
+              :icon="showPassword ? 'lucide:eye-off' : 'lucide:eye'"
+              height="16"
+              class="text-base-content/80"
+            />
           </button>
+        </BaseInput>
+
+        <div class="flex justify-end mt-1">
+          <nuxt-link to="/recover-password" class="text-xs text-base-content/80">
+            Forgot Password?
+          </nuxt-link>
         </div>
-        <nuxt-link to="/recover-password">Forgot password?</nuxt-link>
-        
-        <div>
-        <span v-if="authStore.error" class="error">{{ authStore.error }}</span>
-        <button type="submit" :disabled="authStore.loading">
+      </div>
+
+      <div class="mt-4 md:mt-6">
+        <span v-if="authStore.error" class="error text-error text-sm block mb-2">
+          {{ authStore.error }}
+        </span>
+        <button 
+          class="btn btn-primary btn-block gap-2 text-base" 
+          type="submit" 
+          :disabled="authStore.loading"
+        >
+          <iconify-icon icon="lucide:log-in" height="16" />
           {{ authStore.loading ? 'Logging in...' : 'Log In' }}
         </button>
       </div>
-      
-        <p>
-          Don't have an account? <nuxt-link to="/sign-up">Sign up</nuxt-link>
-        </p>
-      </form>
 
-      <div class="mt-6">
-        <div class="relative">
-          <div class="absolute inset-0 flex items-center">
-            <div class="w-full border-t border-gray-300" />
-          </div>
-          <div class="relative flex justify-center text-sm">
-            <span class="px-2 bg-white text-gray-500">Or continue with</span>
-          </div>
+      <!-- Social Login Divider -->
+      <div class="relative mt-6">
+        <div class="absolute inset-0 flex items-center">
+          <div class="w-full border-t border-base-content/10" />
         </div>
-
-        <div class="mt-6">
-          <GoogleButton @login-success="emit('login-success')" @requires-password="handlePasswordRequired" />
+        <div class="relative flex justify-center text-sm">
+          <span class="px-2 bg-base-100 text-base-content/70">Or </span>
         </div>
       </div>
-    </div>
-  </template>
+
+      <div class="mt-6 text-center">
+        <GoogleButton @login-success="emit('login-success')" @requires-password="handlePasswordRequired" />
+      </div>
+    </form>
+
+    <p class="mt-6 text-center text-sm text-base-content/70">
+      Don't have an account? <nuxt-link to="/sign-up" class="text-base-content/80">Sign up</nuxt-link>
+    </p>
+  </div>
+</template>
   
   
   <style scoped>
-  .login-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    min-height: 100vh;
-    padding: 2rem;
-  }
-  
-  .logo {
-    max-width: 200px;
-    margin-bottom: 2rem;
-  }
-  
-  .form-group {
-    margin-bottom: 1rem;
-    width: 100%;
-    max-width: 320px;
-  }
-  
-  label {
-    display: block;
-    margin-bottom: 0.5rem;
-  }
-  
-  input {
-    width: 100%;
-    padding: 0.5rem;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-  
-  button {
-    width: 100%;
-    padding: 0.75rem;
-    background-color: #4f46e5;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    margin-top: 1rem;
-  }
-  
-  button:disabled {
-    background-color: #9ca3af;
-    cursor: not-allowed;
-  }
-  
-  .error {
-    color: #ef4444;
-    font-size: 0.875rem;
-    margin-top: 0.5rem;
-  }
-  
-  a {
-    color: #4f46e5;
-    text-decoration: none;
-  }
-  
-  a:hover {
-    text-decoration: underline;
-  }
   </style>
