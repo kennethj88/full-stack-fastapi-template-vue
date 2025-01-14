@@ -4,6 +4,8 @@ import { authApi } from '@/composables/api/auth'
 import type { LoginCredentials, SignupCredentials, User } from '@/types'
 import { ref, computed } from 'vue'
 
+const { trackEvent,trackIdentify } = useEventTracking()
+
 export const useAuthStore = defineStore('auth', () => {
   
   // Properly declare refs
@@ -93,6 +95,17 @@ export const useAuthStore = defineStore('auth', () => {
             const userData = await authApi.getCurrentUser()
             if (userData) {
               setUser(userData)
+              
+              trackIdentify(userData.email)
+              
+              trackEvent({
+                eventName: 'User Login',
+                category: 'action',
+                properties: {
+                  'extra':false
+                }
+              })
+              
               return true
             }
           }
