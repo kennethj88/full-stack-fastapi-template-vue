@@ -4,9 +4,9 @@
     <input id="main-drawer" type="checkbox" class="drawer-toggle" />
     
     <!-- Page content -->
-    <div class="drawer-content flex flex-col">
+    <div class="drawer-content flex flex-col bg-[--main-content-background]">
       <!-- Navbar -->
-      <div class="navbar bg-base-100 px-4 shadow-sm">
+      <div class="navbar bg-[--topbar-background] px-4 border-b border-base-content/10">
         <div class="flex-none lg:hidden">
           <label for="main-drawer" class="btn btn-square btn-ghost drawer-button">
             <Icon name="lucide:menu" size="24" />
@@ -17,19 +17,103 @@
         </div>
         <div class="flex-none gap-2">
           <button class="btn btn-ghost btn-circle" @click="toggleTheme">
-            <Icon name="lucide:sun" v-if="isDarkMode" />
-            <Icon name="lucide:moon" v-else />
+            <Icon 
+              :name="isDarkMode ? 'lucide:sun' : 'lucide:moon'" 
+              size="24"
+            />
           </button>
+          <!-- Notifications Dropdown -->
+          <div class="dropdown dropdown-end">
+            <label tabindex="0" class="btn btn-ghost btn-circle">
+              <div class="indicator">
+                <Icon name="lucide:bell" size="24" />
+                <span class="badge badge-sm indicator-item badge-primary">3</span>
+              </div>
+            </label>
+            <ul tabindex="0" class="mt-4 z-[1] card card-compact dropdown-content w-80 bg-base-100 shadow">
+              <div class="card-body">
+                <div class="flex items-center justify-between mb-2">
+                  <span class="text-lg font-bold">Notifications</span>
+                  <span class="text-info text-sm">Mark all as read</span>
+                </div>
+                <!-- Notification Items -->
+                <ul class="space-y-3">
+                  <li class="flex gap-4 items-start">
+                    <div class="avatar">
+                      <div class="w-10 h-10 rounded-full">
+                        <img src="/assets/public/assets/images/avatars/1.png" alt="avatar" />
+                      </div>
+                    </div>
+                    <div class="flex-1">
+                      <p class="text-sm"><span class="font-medium">James Smith</span> commented on your post</p>
+                      <span class="text-xs text-base-content/60">2 hours ago</span>
+                    </div>
+                    <div class="w-2 h-2 bg-primary rounded-full"></div>
+                  </li>
+                  <li class="flex gap-4 items-start">
+                    <div class="avatar">
+                      <div class="w-10 h-10 rounded-full">
+                        <img src="/assets/public/assets/images/avatars/2.png" alt="avatar" />
+                      </div>
+                    </div>
+                    <div class="flex-1">
+                      <p class="text-sm"><span class="font-medium">Sarah Johnson</span> mentioned you in a comment</p>
+                      <span class="text-xs text-base-content/60">5 hours ago</span>
+                    </div>
+                  </li>
+                  <li class="flex gap-4 items-start">
+                    <div class="avatar">
+                      <div class="w-10 h-10 rounded-full">
+                        <img src="/assets/public/assets/images/avatars/3.png" alt="avatar" />
+                      </div>
+                    </div>
+                    <div class="flex-1">
+                      <p class="text-sm"><span class="font-medium">Michael Brown</span> liked your post</p>
+                      <span class="text-xs text-base-content/60">10 hours ago</span>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </ul>
+          </div>
         </div>
         
         <template v-if="authStore.initialized">
-          <div class="flex-none gap-2">
-            <NuxtLink v-if="authStore.isAuthenticated" to="/logout" class="btn btn-ghost normal-case">
-              logout
-            </NuxtLink>
-            <NuxtLink v-if="authStore.user" to="/dashboard/account" class="btn btn-ghost">
-              welcome, {{ authStore.user.full_name }}
-            </NuxtLink>
+          <div class="dropdown dropdown-end dropdown-bottom">
+            <label tabindex="0" class="btn btn-ghost rounded-btn px-1.5 hover:bg-base-content/20">
+              <div class="flex items-center gap-2">
+                <div class="avatar">
+                  <div class="mask mask-squircle w-[30px] h-[30px]">
+                    <img src="/assets/public/assets/images/avatars/1.png" alt="Avatar" />
+                  </div>
+                </div>
+                <div class="flex flex-col items-start">
+                  <p class="text-sm/none">{{ authStore.user?.full_name || 'Deep' }}</p>
+                  <p class="mt-1 text-xs/none text-primary">Edit</p>
+                </div>
+              </div>
+            </label>
+            <ul tabindex="0" class="menu dropdown-content mt-4 w-52 rounded-box bg-base-100 p-2 shadow">
+              <li>
+                <NuxtLink to="/dashboard/account/">
+                  <Icon name="lucide:user" size="16" />
+                  My Profile
+                </NuxtLink>
+              </li>
+              <li>
+                <NuxtLink to="/dashboard/">
+                  <Icon name="lucide:bell" size="16" />
+                  Notifications
+                </NuxtLink>
+              </li>
+              <hr class="-mx-2 my-1 border-base-content/10" />
+              <li>
+                <NuxtLink to="/logout" class="text-error">
+                  <Icon name="lucide:log-out" size="16" />
+                  Logout
+                </NuxtLink>
+              </li>
+            </ul>
           </div>
         </template>
       </div>
@@ -76,7 +160,7 @@
                 </summary>
                 <ul>
                   <li class="mb-0.5">
-                    <NuxtLink to="/dashboard/orders" class="hover:bg-base-content/15">
+                    <NuxtLink to="/dashboard/" class="hover:bg-base-content/15">
                       <div class="flex items-center gap-2">Orders</div>
                     </NuxtLink>
                   </li>
@@ -86,7 +170,7 @@
                     </NuxtLink>
                   </li>
                   <li class="mb-0.5">
-                    <NuxtLink to="/dashboard/customers" class="hover:bg-base-content/15">
+                    <NuxtLink to="/dashboard/" class="hover:bg-base-content/15">
                       <div class="flex items-center gap-2">Customers</div>
                     </NuxtLink>
                   </li>
@@ -94,7 +178,7 @@
               </details>
             </li>
             <li class="mb-0.5">
-              <NuxtLink to="/dashboard/chat" class="hover:bg-base-content/15">
+              <NuxtLink to="/dashboard/" class="hover:bg-base-content/15">
                 <div class="flex items-center gap-2">
                   <Icon name="lucide:messages-square" size="18" />
                   Chat
@@ -114,17 +198,17 @@
                 </summary>
                 <ul>
                   <li class="mb-0.5">
-                    <NuxtLink to="/dashboard/settings" class="hover:bg-base-content/15">
+                    <NuxtLink to="/dashboard/account/" class="hover:bg-base-content/15">
                       <div class="flex items-center gap-2">General</div>
                     </NuxtLink>
                   </li>
                   <li class="mb-0.5">
-                    <NuxtLink to="/dashboard/profile" class="hover:bg-base-content/15">
+                    <NuxtLink to="/dashboard/account/" class="hover:bg-base-content/15">
                       <div class="flex items-center gap-2">Profile</div>
                     </NuxtLink>
                   </li>
                   <li class="mb-0.5">
-                    <NuxtLink to="/dashboard/permissions" class="hover:bg-base-content/15">
+                    <NuxtLink to="/dashboard/" class="hover:bg-base-content/15">
                       <div class="flex items-center gap-2">Permissions</div>
                     </NuxtLink>
                   </li>
@@ -139,7 +223,7 @@
           <p class="text-center text-base font-medium">Need Help?</p>
           <p class="mt-3 text-center text-sm">Contact support for assistance</p>
           <div class="mt-3 text-center">
-            <NuxtLink to="/dashboard/support">
+            <NuxtLink to="/">
               <button class="btn btn-primary btn-sm">Support</button>
             </NuxtLink>
           </div>
@@ -167,7 +251,7 @@ const toggleTheme = () => {
 
 <style scoped>
 .leftmenu-wrapper {
-  @apply w-64 bg-base-100 border-r border-base-content/10;
+  @apply w-64 bg-[--leftmenu-background] border-r border-base-content/10;
 }
 
 .main-wrapper {

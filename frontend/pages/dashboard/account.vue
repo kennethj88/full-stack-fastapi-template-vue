@@ -6,6 +6,7 @@ const user = computed(() => authStore.user)
 
 // Redirect if not authenticated
 definePageMeta({
+  layout: 'dashboard',
   middleware: ['auth']
 })
 </script>

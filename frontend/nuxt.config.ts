@@ -29,7 +29,9 @@ export default defineNuxtConfig({
     public: {
       apiUrl: process.env.VITE_API_URL || 'http://localhost:8000',
       googleClientId: process.env.GOOGLE_CLIENT_ID,
-      umamiWebsiteId: process.env.UMAMI_WEBSITE_ID
+      umamiWebsiteId: process.env.UMAMI_WEBSITE_ID,
+      enableDevTracking: true,
+      // Add other tracking-related config here
     }
   },
   colorMode: {
