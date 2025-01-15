@@ -129,7 +129,17 @@ export const useAuthStore = defineStore('auth', () => {
             console.log('sign up: success', response.user)
             //setToken(response.access_token) //handled seperately
             setUser(response)
+
             loading.value = false
+            trackIdentify(response.user.email)
+            trackEvent({
+              eventName: 'User Signup',
+              category: 'action',
+              properties: {
+                'extra':false
+              }
+            })
+
             return true
         }
         loading.value = false
