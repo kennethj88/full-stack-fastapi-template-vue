@@ -83,6 +83,20 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
+  async function resetPassword(token: string, newPassword: string) {
+    try {
+      loading.value = true
+      error.value = null
+      await authApi.resetPassword(token, newPassword)
+      return true
+    } catch (error: any) {
+      error.value = error.response?.data?.detail || 'An error occurred'
+      return false
+    } finally {
+      loading.value = false
+    }
+  }
+  
   async function login(payload: LoginCredentials) {
     loading.value = true
     error.value = null
@@ -242,6 +256,7 @@ export const useAuthStore = defineStore('auth', () => {
     forgotPassword,
     setUser,
     updateUser,
+    resetPassword,
     setToken,
     cleanUser,
     googleLogin,

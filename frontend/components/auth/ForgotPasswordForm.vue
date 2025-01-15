@@ -1,52 +1,71 @@
 <template>
-  <div class="form-container">
-    <img :src="logo" alt="Logo" class="logo" />
-    <h2>Recover Password</h2>
-    
-    <form @submit.prevent="handleSubmit">
-      <div class="form-group">
-        <label for="email">Email</label>
-        <input
-          v-model="form.email"
-          type="email"
-          id="email"
-          required
-          placeholder="Enter your email"
-        />
-        <span v-if="errors.email" class="error">{{ errors.email }}</span>
-      </div>
+  <div class="grid min-h-screen grid-cols-12 overflow-auto">
+   
+  <!-- Form Panel -->
+  <div class="col-span-12 lg:col-span-5 xl:col-span-4 2xl:col-span-3">
+    <div class="flex flex-col items-stretch p-6 md:p-8">
+      
 
-      <button type="submit" :disabled="authStore.loading">
-        {{ authStore.loading ? 'Sending...' : 'Send Recovery Email' }}
-      </button>
+      <!-- Form Content -->
+      <h3 class="mt-8 text-center text-xl font-semibold md:mt-12">Forgot Password</h3>
+      <h3 class="mt-2 text-center text-sm text-base-content/70">
+        Seamless Access, Secure Connection: Your Gateway to a Personalized Experience.
+      </h3>
 
-      <div v-if="authStore.error" class="error">
-        {{ authStore.error }}
-      </div>
+      <form @submit.prevent="handleSubmit" class="mt-6 md:mt-10">
+        <div class="form-control">
+          <BaseInput
+            labelTxt="Email Address"
+            iconifyIcon="lucide:mail"
+            v-model="form.email"
+            type="email"
+            id="email"
+            required
+            placeholder="Email Address"
+            autocomplete="email"
+            :error="errors.email"
+          />
+        </div>
 
-      <div v-if="success" class="success">
-        Recovery email sent! Please check your inbox.
-      </div>
+        
 
-      <p class="mt-4">
-        Remember your password? <nuxt-link to="/login">Log in</nuxt-link>
-      </p>
-    </form>
+        <button
+          type="submit"
+          :disabled="authStore.loading"
+          class="btn btn-primary btn-block gap-2 text-base mt-4 md:mt-6"
+        >
+          <Icon name="lucide:mail-plus" height="16" />
+          {{ authStore.loading ? 'Sending...' : 'Send a reset link' }}
+        </button>
+
+        <div v-if="authStore.error" class="mt-4 text-error text-sm text-center">
+          {{ authStore.error }}
+        </div>
+
+        <div v-if="success" class="mt-4 text-success text-sm text-center">
+          Recovery email sent! Please check your inbox.
+        </div>
+
+        <p class="mt-4 text-center text-sm text-base-content/80 md:mt-6">
+          I have already to
+          <nuxt-link to="/login" class="text-primary hover:underline">Login</nuxt-link>
+        </p>
+      </form>
+    </div>
   </div>
+</div>
 </template>
 
 <script setup lang="ts">
 import { ref, reactive } from 'vue'
 import { useAuthStore } from '~/stores/auth'
-
-// Update the logo import to use the public path
-const logo = '/images/fastapi-logo.svg'
+import BaseInput from '~/components/ui/BaseInput.vue'
 
 const authStore = useAuthStore()
 const success = ref(false)
 
 const form = reactive({
-  email: ''
+  email: '',
 })
 
 const errors = reactive({
@@ -62,6 +81,7 @@ const validateForm = () => {
     isValid = false
   }
 
+  
   return isValid
 }
 
@@ -74,77 +94,4 @@ const handleSubmit = async () => {
     }
   }
 }
-</script>
-
-<style scoped>
-.form-container {
-  width: 100%;
-  max-width: 400px;
-  padding: 2rem;
-}
-
-.logo {
-  max-width: 200px;
-  margin: 0 auto 2rem;
-  display: block;
-}
-
-h2 {
-  text-align: center;
-  margin-bottom: 2rem;
-}
-
-.form-group {
-  margin-bottom: 1rem;
-}
-
-label {
-  display: block;
-  margin-bottom: 0.5rem;
-}
-
-input {
-  width: 100%;
-  padding: 0.5rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-button {
-  width: 100%;
-  padding: 0.75rem;
-  background-color: #4f46e5;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  margin-top: 1rem;
-}
-
-button:disabled {
-  background-color: #9ca3af;
-  cursor: not-allowed;
-}
-
-.error {
-  color: #ef4444;
-  font-size: 0.875rem;
-  margin-top: 0.5rem;
-}
-
-.success {
-  color: #10b981;
-  font-size: 0.875rem;
-  margin-top: 0.5rem;
-  text-align: center;
-}
-
-a {
-  color: #4f46e5;
-  text-decoration: none;
-}
-
-a:hover {
-  text-decoration: underline;
-}
-</style> 
+</script> 

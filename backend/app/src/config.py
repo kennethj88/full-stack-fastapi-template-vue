@@ -109,6 +109,6 @@ class Settings(BaseSettings):
     GOOGLE_CLIENT_ID: str = ""
     GOOGLE_CLIENT_SECRET: str = ""
     GOOGLE_REDIRECT_URI: str = "http://localhost:3000/auth/google/callback"
-
+    EMAIL_RESET_TOKEN_EXPIRE_HOURS: int = 3
 
 settings = Settings()  # type: ignore

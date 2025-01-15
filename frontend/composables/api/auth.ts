@@ -27,13 +27,13 @@ export const authApi = {
 
   forgotPassword: async (email: string) => {
     const axios = useAxiosInstance()
-    const response = await axios.post(`/api/v1/password-recovery/${email}`)
+    const response = await axios.post(`/api/v1/auth/password-recovery/${email}`)
     return response.data
   },
 
   resetPassword: async (token: string, newPassword: string) => {
     const axios = useAxiosInstance()
-    const response = await axios.post('/api/v1/reset-password/', {
+    const response = await axios.post('/api/v1/auth/reset-password/', {
       token,
       new_password: newPassword
     })

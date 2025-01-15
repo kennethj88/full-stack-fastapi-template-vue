@@ -142,7 +142,7 @@ const handlePasswordRequired = (data: GooglePasswordData) => {
         </BaseInput>
 
         <div class="flex justify-end mt-1">
-          <nuxt-link to="/recover-password" class="text-xs text-base-content/80">
+          <nuxt-link to="/forgot-password" class="text-xs text-base-content/80">
             Forgot Password?
           </nuxt-link>
         </div>
