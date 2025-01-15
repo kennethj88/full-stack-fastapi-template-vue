@@ -133,8 +133,8 @@ const handlePasswordRequired = (data: GooglePasswordData) => {
             class="btn btn-circle btn-ghost btn-xs hover:bg-base-content/10" 
             @click.stop="toggleShowPassword"
           >
-            <iconify-icon
-              :icon="showPassword ? 'lucide:eye-off' : 'lucide:eye'"
+            <Icon
+              :name="showPassword ? 'lucide:eye-off' : 'lucide:eye'"
               height="16"
               class="text-base-content/80"
             />
@@ -157,7 +157,7 @@ const handlePasswordRequired = (data: GooglePasswordData) => {
           type="submit" 
           :disabled="authStore.loading"
         >
-          <iconify-icon icon="lucide:log-in" height="16" />
+          <Icon name="lucide:log-in" height="16" />
           {{ authStore.loading ? 'Logging in...' : 'Log In' }}
         </button>
       </div>

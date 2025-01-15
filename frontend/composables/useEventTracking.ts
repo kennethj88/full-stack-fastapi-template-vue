@@ -9,12 +9,11 @@ export interface TrackingEvent {
 }
 
 export const useEventTracking = () => {
-  const config = useRuntimeConfig()
-  
   const trackIdentify = async (userToken: string, properties = {}) => {
+    const config = useRuntimeConfig()
     console.log('identify',userToken,properties)
     window?.umami?.identify({ email: userToken  });
- }
+  }
 
   const trackEvent = async ({
     eventName,
@@ -23,9 +22,10 @@ export const useEventTracking = () => {
     value,
     properties = {}
   }: TrackingEvent) => {
+    const config = useRuntimeConfig()
     try {
       // You can add conditions here to disable tracking in dev mode
-      if (process.dev && !config.public.enableDevTracking) return
+      if (import.meta.dev && !config.public.enableDevTracking) return
 
       // Construct the event payload
       const eventPayload = {
@@ -43,9 +43,7 @@ export const useEventTracking = () => {
       
       // Example of sending to your backend
       //track umami
-      window?.umami?.track(eventName,eventPayload); 
-
-
+      window.umami?.track(eventName,eventPayload); 
 
     } catch (error) {
       console.error('Failed to track event:', error)
@@ -61,7 +59,6 @@ export const useEventTracking = () => {
       properties
     })
   }
-
 
   return {
     trackEvent,
