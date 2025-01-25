@@ -1,6 +1,9 @@
 import uuid
 from unittest.mock import patch
 
+from backend.app.src.core.security import verify_password
+from backend.app.src.users import service
+from backend.app.src.users.schemas import UserCreate
 from fastapi.testclient import TestClient
 from sqlmodel import Session, select
 
@@ -9,6 +12,7 @@ from src
 from srcrify_password
 from srcrCreate
 from app.tests.utils.utils import random_email, random_lower_string
+from src.core.config import settings
 
 
 def test_get_users_superuser_me(
@@ -38,8 +42,8 @@ def test_create_user_new_email(
 ) -> None:
     with (
         patch("app.utils.send_email", return_value=None),
-        patch("app.core.config.settings.SMTP_HOST", "smtp.example.com"),
-        patch("app.core.config.settings.SMTP_USER", "admin@example.com"),
+        patch("app.core.config.settings.MAILGUN_DOMAIN", "example.com"),
+        patch("app.core.config.settings.EMAILS_FROM_EMAIL", "admin@example.com"),
     ):
         username = random_email()
         password = random_lower_string()

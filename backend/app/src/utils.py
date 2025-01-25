@@ -8,7 +8,8 @@ import emails  # type: ignore
 import jwt
 from jinja2 import Template
 from jwt.exceptions import InvalidTokenError
-
+from klaviyo_api import KlaviyoAPI
+import mailgun
 from src.core import security
 from src.config import settings
 
@@ -30,32 +31,94 @@ def render_email_template(*, template_name: str, context: dict[str, Any]) -> str
     return html_content
 
 
-def send_email(
+async def send_klaviyo_event(
+    *,
+    event_name: str,
+    customer_properties: dict[str, Any],
+    properties: dict[str, Any] | None = None,
+    timestamp: datetime | None = None
+) -> bool:
+    """
+    Send an event to Klaviyo using their API.
+    
+    Args:
+        event_name: Name of the event to track
+        customer_properties: Dict containing at minimum an email or phone number
+        properties: Optional properties related to the event
+        timestamp: Optional timestamp for the event
+    """
+    try:
+
+        if not settings.KLAVIYO_API_KEY:
+            logger.warning("Klaviyo API key not set, skipping event tracking")
+            return False
+
+        api = KlaviyoAPI(settings.KLAVIYO_API_KEY)
+        
+        event_data = {
+            "type": "event",
+            "attributes": {
+                "metric": {
+                    "name": event_name
+                },
+                "profile": customer_properties,
+                "properties": properties or {},
+                "time": timestamp.isoformat() if timestamp else datetime.now(timezone.utc).isoformat()
+            }
+        }
+
+        await api.Events.create(event_data)
+        logger.info(f"Successfully sent event '{event_name}' to Klaviyo")
+        return True
+
+    except Exception as e:
+        logger.error(f"Failed to send Klaviyo event: {str(e)}")
+        return False
+
+
+async def send_email(
     *,
     email_to: str,
     subject: str = "",
     html_content: str = "",
-) -> None:
-    logger.info(f"Sending email with HTML content: {html_content}")
+) -> bool:
+    """
+    Send an email using Mailgun API.
     
-    assert settings.emails_enabled, "no provided configuration for email variables"
-    message = emails.Message(
-        subject=subject,
-        html=html_content,
-        mail_from=(settings.EMAILS_FROM_NAME, settings.EMAILS_FROM_EMAIL),
-    )
-    smtp_options = {"host": settings.SMTP_HOST, "port": settings.SMTP_PORT}
-    if settings.SMTP_TLS:
-        smtp_options["tls"] = True
-    elif settings.SMTP_SSL:
-        smtp_options["ssl"] = True
-    if settings.SMTP_USER:
-        smtp_options["user"] = settings.SMTP_USER
-    if settings.SMTP_PASSWORD:
-        smtp_options["password"] = settings.SMTP_PASSWORD
-    response = message.send(to=email_to, smtp=smtp_options)
-    logger.info(f"send email result: {response}")
-
+    Args:
+        email_to: Recipient email address
+        subject: Email subject
+        html_content: HTML content of the email
+    
+    Returns:
+        bool: True if email was sent successfully, False otherwise
+    """
+    try:
+        if settings.emails_enabled:
+             
+            # Initialize Mailgun client
+            mg = mailgun.Client(settings.MAILGUN_API_KEY)
+            
+            # Prepare email data
+            email_data = {
+                "from": f"{settings.PROJECT_NAME} <{settings.EMAILS_FROM_EMAIL}>",
+                "to": [email_to],
+                "subject": subject,
+                "html": html_content,
+            }
+            
+            # Send email using Mailgun domain
+            response = mg.domains(settings.MAILGUN_DOMAIN).messages.send(**email_data)
+            
+            logger.info(f"Email sent successfully. Response: {response}")
+            return True
+        else:
+            logger.info("Emails disabled, skipping send")
+            return False
+            
+    except Exception as e:
+        logger.error(f"Failed to send email: {str(e)}")
+        return False
 
 def generate_test_email(email_to: str) -> EmailData:
     project_name = settings.PROJECT_NAME
@@ -67,10 +130,24 @@ def generate_test_email(email_to: str) -> EmailData:
     return EmailData(html_content=html_content, subject=subject)
 
 
-def generate_reset_password_email(email_to: str, email: str, token: str) -> EmailData:
+async def generate_reset_password_email(email_to: str, email: str, token: str) -> EmailData:
     project_name = settings.PROJECT_NAME
     subject = f"{project_name} - Password recovery for user {email}"
     link = f"{settings.FRONTEND_HOST}/reset-password?token={token}"
+   
+    send_klaviyo_event(
+        event_name="Reset Password Request",
+        customer_properties={
+            "email": email_to,
+        },
+        properties={
+            "source": "webapp",
+            "valid_hours": settings.EMAIL_RESET_TOKEN_EXPIRE_HOURS,
+            "link": link,
+        }
+    )
+
+    
     html_content = render_email_template(
         template_name="reset_password.html",
         context={
@@ -81,7 +158,10 @@ def generate_reset_password_email(email_to: str, email: str, token: str) -> Emai
             "link": link,
         },
     )
-    return EmailData(html_content=html_content, subject=subject)
+
+    send_email(email_to=email_to, subject= subject ,html_content=html_content ) 
+    
+    return True
 
 
 def generate_new_account_email(

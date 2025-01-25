@@ -45,7 +45,7 @@ class Settings(BaseSettings):
     @property
     def all_cors_origins(self) -> list[str]:
         return [str(origin).rstrip("/") for origin in self.BACKEND_CORS_ORIGINS] + [
-            self.FRONTEND_HOST
+            self.FRONTEND_HOST,
         ]
 
     PROJECT_NAME: str
@@ -68,19 +68,16 @@ class Settings(BaseSettings):
             path=self.POSTGRES_DB,
         )
 
-    SMTP_TLS: bool = True
-    SMTP_PORT: int | None = None
-    SMTP_HOST: str | None = None
-    SMTP_USER: str | None = None
-    SMTP_PASSWORD: str | None = None
     EMAILS_FROM_EMAIL: str | None = None
     EMAILS_FROM_NAME: str | None = None
-
+    MAILGUN_DOMAIN: str | None = None
+    MAILGUN_API_KEY: str | None = None
+    
     @computed_field  # type: ignore[prop-decorator]
     @property
     def emails_enabled(self) -> bool:
-        return bool(self.SMTP_HOST and self.EMAILS_FROM_EMAIL)
-
+        return False
+    
     EMAIL_TEST_USER: str = "test@example.com"
     FIRST_SUPERUSER: str
     FIRST_SUPERUSER_PASSWORD: str

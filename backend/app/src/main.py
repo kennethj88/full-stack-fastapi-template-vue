@@ -45,7 +45,7 @@ app = FastAPI(
     generate_unique_id_function=custom_generate_unique_id,
 )
 
-logger.info(f"Starting {settings.PROJECT_NAME} in {settings.ENVIRONMENT} environment")
+logger.info(f"Starting {settings.PROJECT_NAME} in {settings.ENVIRONMENT} environment cors {settings.all_cors_origins}")
 
 # Set all CORS enabled origins
 if settings.all_cors_origins:

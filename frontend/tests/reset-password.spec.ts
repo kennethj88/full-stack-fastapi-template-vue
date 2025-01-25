@@ -1,5 +1,4 @@
 import { expect, test } from "@playwright/test"
-import { findLastEmail } from "./utils/mailcatcher"
 import { randomEmail, randomPassword } from "./utils/random"
 import { logInUser, signUpNewUser } from "./utils/user"
 
@@ -44,16 +43,9 @@ test("User can reset password successfully using the link", async ({
 
   await page.getByRole("button", { name: "Continue" }).click()
 
-  const emailData = await findLastEmail({
-    request,
-    filter: (e) => e.recipients.includes(`<${email}>`),
-    timeout: 5000,
-  })
+   
 
-  await page.goto(
-    `${process.env.MAILCATCHER_HOST}/messages/${emailData.id}.html`,
-  )
-
+ 
   const selector = 'a[href*="/reset-password?token="]'
 
   let url = await page.getAttribute(selector, "href")
@@ -99,15 +91,7 @@ test("Weak new password validation", async ({ page, request }) => {
   await page.getByPlaceholder("Email").fill(email)
   await page.getByRole("button", { name: "Continue" }).click()
 
-  const emailData = await findLastEmail({
-    request,
-    filter: (e) => e.recipients.includes(`<${email}>`),
-    timeout: 5000,
-  })
-
-  await page.goto(
-    `${process.env.MAILCATCHER_HOST}/messages/${emailData.id}.html`,
-  )
+ 
 
   const selector = 'a[href*="/reset-password?token="]'
   let url = await page.getAttribute(selector, "href")

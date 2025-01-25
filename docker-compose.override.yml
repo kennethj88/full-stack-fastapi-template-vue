@@ -34,30 +34,8 @@ services:
       - ./backend/htmlcov:/app/htmlcov
       - ./backend:/app
     environment:
-      SMTP_HOST: "mailcatcher"
-      SMTP_PORT: "1025"
-      SMTP_TLS: "false"
       EMAILS_FROM_EMAIL: "noreply@example.com"
       ENVIRONMENT: "local"
-  mailcatcher:
-    image: schickling/mailcatcher
-    ports:
-      - "1080:1080"
-      - "1025:1025"
-  frontend:
-    restart: "no"
-    ports:
-      - "3000:3000"
-    build:
-      context: ./frontend
-      args:
-        - VITE_API_URL=${BACKEND_HOST?Variable not set}
-        - NODE_ENV=development
-    environment:
-      HOST: 0.0.0.0
-      NODE_ENV: development
-    volumes:
-      - ./frontend:/app
   playwright:
     build:
       context: ./frontend
@@ -68,12 +46,10 @@ services:
     ipc: host
     depends_on:
       - backend
-      - mailcatcher
     env_file:
       - .env
     environment:
       - VITE_API_URL=${BACKEND_HOST?Variable not set}
-      - MAILCATCHER_HOST=http://localhost:1080
       - PLAYWRIGHT_HTML_HOST=0.0.0.0
       - CI=${CI}
     volumes:

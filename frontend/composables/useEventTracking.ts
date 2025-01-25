@@ -1,5 +1,3 @@
-import { useRuntimeConfig } from '#app'
-
 export interface TrackingEvent {
   eventName: string
   category?: string
@@ -11,6 +9,7 @@ export interface TrackingEvent {
 export const useEventTracking = () => {
   const trackIdentify = async (userToken: string, properties = {}) => {
     const config = useRuntimeConfig()
+
     console.log('identify',userToken,properties)
     window?.umami?.identify({ email: userToken  });
   }

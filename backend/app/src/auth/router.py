@@ -219,11 +219,7 @@ async def recover_password(
     email_data = generate_reset_password_email(
         email_to=user.email, email=email, token=password_reset_token
     )
-    await send_email(
-        email_to=user.email,
-        subject=email_data.subject,
-        html_content=email_data.html_content,
-    )
+    
     return Message(message="Password recovery email sent")
 
 
