@@ -82,6 +82,7 @@ services:
       - MAILGUN_DOMAIN=${MAILGUN_DOMAIN}
       - MAILGUN_API_KEY=${MAILGUN_API_KEY}
       - KLAVIYO_COMPANY_ID={$KLAVIYO_COMPANY_ID}
+      - KLAVIYO_API_KEY={$KLAVIYO_API_KEY}
       - GOOGLE_CLIENT_ID={$GOOGLE_CLIENT_ID}
       - GOOGLE_CLIENT_SECRET={$GOOGLE_CLIENT_SECRET}
       - GOOGLE_REDIRECT_URI={$GOOGLE_REDIRECT_URI}
@@ -109,7 +110,7 @@ services:
     build:
       context: ./frontend
       args:
-        - VITE_API_URL=${FRONTEND_HOST?Variable not set}
+        - VITE_API_URL=${BACKEND_HOST?Variable not set}
         - NODE_ENV=production
     ports:
       - "3000:3000"

@@ -216,7 +216,7 @@ async def recover_password(
             detail="The user with this email does not exist in the system.",
         )
     password_reset_token = generate_password_reset_token(email=email)
-    email_data = generate_reset_password_email(
+    email_data = await generate_reset_password_email(
         email_to=user.email, email=email, token=password_reset_token
     )
     
@@ -266,7 +266,7 @@ async def recover_password_html_content(
             detail="The user with this username does not exist in the system.",
         )
     password_reset_token = generate_password_reset_token(email=email)
-    email_data = generate_reset_password_email(
+    email_data = await generate_reset_password_email(
         email_to=user.email, email=email, token=password_reset_token
     )
 

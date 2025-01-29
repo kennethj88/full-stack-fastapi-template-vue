@@ -48,26 +48,44 @@ async def send_klaviyo_event(
         timestamp: Optional timestamp for the event
     """
     try:
-
+        logger.info('start send klaviyo event %s' % event_name)
         if not settings.KLAVIYO_API_KEY:
             logger.warning("Klaviyo API key not set, skipping event tracking")
             return False
 
-        api = KlaviyoAPI(settings.KLAVIYO_API_KEY)
+        # Initialize with the private API key and specify revision
+        klaviyo = KlaviyoAPI(
+            settings.KLAVIYO_API_KEY, 
+            max_delay=60,
+            max_retries=3,
+       
+        )
         
         event_data = {
-            "type": "event",
-            "attributes": {
-                "metric": {
-                    "name": event_name
-                },
-                "profile": customer_properties,
-                "properties": properties or {},
-                "time": timestamp.isoformat() if timestamp else datetime.now(timezone.utc).isoformat()
+            "data": {
+                "type": "event",
+                "attributes": {
+                    "metric": {
+                        "data": {
+                            "type": "metric",
+                            "attributes": {
+                                "name": event_name
+                            }
+                        }
+                    },
+                    "profile": {
+                        "data": {
+                            "type": "profile",
+                            "attributes": customer_properties
+                        }
+                    },
+                    "properties": properties or {},
+                    "time": timestamp.isoformat() if timestamp else datetime.now(timezone.utc).isoformat()
+                }
             }
         }
 
-        await api.Events.create(event_data)
+        await klaviyo.Events.create_event(event_data)
         logger.info(f"Successfully sent event '{event_name}' to Klaviyo")
         return True
 
@@ -135,7 +153,7 @@ async def generate_reset_password_email(email_to: str, email: str, token: str) -
     subject = f"{project_name} - Password recovery for user {email}"
     link = f"{settings.FRONTEND_HOST}/reset-password?token={token}"
    
-    send_klaviyo_event(
+    await send_klaviyo_event(
         event_name="Reset Password Request",
         customer_properties={
             "email": email_to,
@@ -158,8 +176,9 @@ async def generate_reset_password_email(email_to: str, email: str, token: str) -
             "link": link,
         },
     )
+    logger.info(html_content)
 
-    send_email(email_to=email_to, subject= subject ,html_content=html_content ) 
+    #send_email(email_to=email_to, subject= subject ,html_content=html_content ) 
     
     return True
 

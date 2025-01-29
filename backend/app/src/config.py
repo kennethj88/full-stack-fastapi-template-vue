@@ -72,6 +72,8 @@ class Settings(BaseSettings):
     EMAILS_FROM_NAME: str | None = None
     MAILGUN_DOMAIN: str | None = None
     MAILGUN_API_KEY: str | None = None
+    KLAVIYO_API_KEY: str | None = None
+    KLAVIYO_COMPANY_ID: str | None = None
     
     @computed_field  # type: ignore[prop-decorator]
     @property

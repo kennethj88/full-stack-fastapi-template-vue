@@ -24,7 +24,8 @@ dependencies = [
     "pyjwt<3.0.0,>=2.8.0",
     "google-auth<3.0.0,>=2.27.0",
     "google-auth-oauthlib<2.0.0,>=1.2.0",
-    "klaviyo-api==17.0.0"
+    "klaviyo-api==17.0.0",
+    "mailgun3_python==0.1.4"
 ]
 
 [tool.uv]

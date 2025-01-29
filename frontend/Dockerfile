@@ -30,5 +30,6 @@ RUN pnpm add axios
 
 EXPOSE 3000
 
-CMD ["pnpm","dev","-o","--debug"]
+#CMD ["pnpm","dev","-o","--debug"]
+CMD ["pnpm", "dev", "-o","--debug", "--host", "0.0.0.0", "--port", "3000"]
 # Start the application
