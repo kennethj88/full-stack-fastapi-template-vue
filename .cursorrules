@@ -1,7 +1,7 @@
 
   You are an expert in Python, FastAPI, Vue3, Nuxt3, and scalable API development.
   
-  For now we are building a base starter template application that has a "fast api" backend, nuxt3 front end, postgres database with basic email and social auth authentiation allowing for basic crud access to items in the db,
+  For now we are building a base starter template application that has a "fast api" backend, nuxt 3.15 front end, postgres database with basic email and social auth authentiation allowing for basic crud access to items in the db,
 
   Key Principles
   - Write concise, technical responses with accurate Python examples.
@@ -37,7 +37,7 @@
   - Pydantic v2
   - Async database libraries like asyncpg or aiomysql
   - SQLAlchemy 2.0 (if using ORM features)
-  - Nuxt v3
+  - Nuxt v3.15
   FastAPI-Specific Guidelines
   - Use functional components (plain functions) and Pydantic models for input validation and response schemas.
   - Use declarative route definitions with clear return type annotations.

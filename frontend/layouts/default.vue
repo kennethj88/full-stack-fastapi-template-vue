@@ -1,4 +1,5 @@
 <template>
+<div>
   <div class="fixed inset-x-0 top-0 z-[60] border-transparent backdrop-blur-sm transition-all duration-500"
     id="landing_top_bar">
     <div class="container">
@@ -93,17 +94,39 @@
 
   <!-- Theme Toggle -->
   <div class="fixed bottom-5 end-5 z-10">
-    <button aria-label="Theme toggler" data-action="theme-toggle"
-      class="btn btn-circle btn-ghost border border-base-content/10 text-base-content/70 hover:bg-base-content/10">
-      <Icon icon="lucide:sun" height="20" class="hidden dark:inline" />
-      <Icon icon="lucide:moon" height="20" class="inline dark:hidden" />
-    </button>
+     <!--
+    <button 
+      aria-label="Theme toggler" 
+      @click="toggleTheme"
+      class="btn btn-circle btn-ghost border border-base-content/10 text-base-content/70 hover:bg-base-content/10"
+    >
+     <!--
+      <Icon 
+        :icon="isDarkMode ? 'lucide:sun' : 'lucide:moon'" 
+        height="20" 
+        :class="{ 'hidden': !isDarkMode, 'inline': isDarkMode }"
+      />
+      <Icon 
+        :icon="isDarkMode ? 'lucide:moon' : 'lucide:sun'" 
+        height="20" 
+        :class="{ 'hidden': isDarkMode, 'inline': !isDarkMode }"
+      />
+    </button>--->
   </div>
+</div>
 </template>
 
 <script setup lang="ts">
 import { Icon } from '@iconify/vue'
 import { useAuthStore } from '@/stores/auth'
+//import { useTheme } from '@/composables/useTheme'
 
 const authStore = useAuthStore()
+//const { isDarkMode, toggleTheme, initTheme } = useTheme()
+
+/*
+onMounted(() => {
+  initTheme()
+})
+  */
 </script>

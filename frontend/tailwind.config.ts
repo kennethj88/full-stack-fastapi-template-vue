@@ -1,7 +1,14 @@
-import theme from "daisyui/src/theming/themes"
+import { light, dark } from "daisyui/src/theming/themes"
 
 /** @type {import('tailwindcss').Config} */
-module.exports = {
+export default {
+    content: [
+        "./components/**/*.{js,vue,ts}",
+        "./layouts/**/*.vue",
+        "./pages/**/*.vue",
+        "./plugins/**/*.{js,ts}",
+        "./app.vue",
+    ],
     variants: {
         extend: {},
     },
@@ -32,7 +39,7 @@ module.exports = {
     daisyui: {
         themes: [{
             light: {
-                ...theme.light,
+                ...light,
 
                 "primary": "#3e5eff",
                 "primary-content": "#ffffff",
@@ -61,7 +68,7 @@ module.exports = {
                 "--topbar-background": "#ffffff",
             },
             dark: {
-                ...theme.dark,
+                ...dark,
 
                 "primary": "#167bff",
                 "primary-content": "#ffffff",
@@ -94,4 +101,4 @@ module.exports = {
     plugins: [
         require('daisyui'),
     ],
-};
+}

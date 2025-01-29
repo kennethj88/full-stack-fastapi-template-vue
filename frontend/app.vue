@@ -1,8 +1,10 @@
 <script setup lang="ts">
-import { useAuthStore } from '@/stores/auth'
-import { useTheme } from '@/composables/useTheme'
-const auth = useAuthStore()
-const { isDarkMode } = useTheme()
+//import { useAuthStore } from '@/stores/auth'
+//import { useTheme } from '@/composables/useTheme'
+//import { onMounted } from 'vue'
+
+//const auth = useAuthStore()
+//const { isDarkMode, initTheme } = useTheme()
 
 useHead({
   link: [
@@ -23,26 +25,20 @@ useHead({
 })
 
 // Initialize auth store
-onMounted(async () => {
-  if (import.meta.client && !auth.initialized) {
-    try {
-      await auth.init()
-    } catch (error) {
-      console.error('Auth initialization error:', error)
-    }
-  }
-})
+//onMounted(async () => {
+  //if (import.meta.client && !auth.initialized) {
+   // try {
+   //   await auth.init()
+  //  } catch (error) {
+  //    console.error('Auth initialization error:', error)
+ //   }
+ // }
+//})
 
 // Initialize theme on app load
-onMounted(() => {
-  if (isDarkMode.value) {
-    document.documentElement.classList.add('dark')
-    document.documentElement.setAttribute('data-theme', 'dark')
-  } else {
-    document.documentElement.classList.remove('dark')
-    document.documentElement.setAttribute('data-theme', 'light')
-  }
-})
+//onMounted(() => {
+//  initTheme()
+//})
 </script>
 
 <template>

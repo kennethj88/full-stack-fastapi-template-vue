@@ -1,4 +1,5 @@
 <template>
+<div>
   <div class="drawer lg:drawer-open">
     <!-- Drawer toggle for mobile -->
     <input id="main-drawer" type="checkbox" class="drawer-toggle" />
@@ -16,12 +17,12 @@
           <h1 class="text-xl font-semibold">Dashboard</h1>
         </div>
         <div class="flex-none gap-2">
-          <button class="btn btn-ghost btn-circle" @click="toggleTheme">
+         <!---<button class="btn btn-ghost btn-circle" @click="toggleTheme">
             <Icon 
               :name="isDarkMode ? 'lucide:sun' : 'lucide:moon'" 
               size="24"
             />
-          </button>
+          </button>-->
           <!-- Notifications Dropdown -->
           <div class="dropdown dropdown-end">
             <label tabindex="0" class="btn btn-ghost btn-circle">
@@ -231,22 +232,23 @@
       </div>
     </div>
   </div>
+</div>
 </template>
 
 <script setup lang="ts">
 import { useAuthStore } from '@/stores/auth'
 
-const isDarkMode = ref(false)
+const isDarkMode = true//ref(false)
 //
 const authStore = useAuthStore()
 
 console.log('layout initialized',authStore.initialized)
 
 
-const toggleTheme = () => {
+/*const toggleTheme = () => {
   isDarkMode.value = !isDarkMode.value
   document.documentElement.classList.toggle('dark')
-}
+}*/
 </script>
 
 <style scoped>
