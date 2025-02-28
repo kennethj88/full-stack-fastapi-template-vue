@@ -1,33 +1,37 @@
-export const useTheme = () => {
-  // Use useState to persist theme across page refreshes
-  const isDarkMode = useState('isDarkMode', () => true)
+/*
+import { ref } from 'vue'
 
-  // Toggle theme function
-  const toggleTheme = () => {
-    isDarkMode.value = !isDarkMode.value
-    
-    // Update document class for Tailwind/DaisyUI
-    if (process.client) {
-      if (isDarkMode.value) {
-        document.documentElement.classList.add('dark')
-        document.documentElement.setAttribute('data-theme', 'dark')
-      } else {
-        document.documentElement.classList.remove('dark')
-        document.documentElement.setAttribute('data-theme', 'light')
-      }
+export function useTheme() {
+  const isDarkMode = true //ref(false)
+
+  const initTheme = () => {
+    if (import.meta.client) {
+       // isDarkMode.value = document.documentElement.classList.contains('dark')
+        
     }
   }
 
-  // Initialize theme on client side
-  onMounted(() => {
-    if (isDarkMode.value) {
-      document.documentElement.classList.add('dark')
-      document.documentElement.setAttribute('data-theme', 'dark')
+ 
+
+  const toggleTheme = () => {
+    isDarkMode.value = !isDarkMode.value
+    if (import.meta.client) {
+        
+        if (isDarkMode.value) {
+            document.documentElement.classList.add('dark')
+            document.documentElement.setAttribute('data-theme', 'dark')
+        } else {
+            document.documentElement.classList.remove('dark')
+            document.documentElement.setAttribute('data-theme', 'light')
+        }
     }
-  })
+  }
 
   return {
     isDarkMode,
-    toggleTheme
+    toggleTheme,
+    initTheme
   }
 } 
+
+*/

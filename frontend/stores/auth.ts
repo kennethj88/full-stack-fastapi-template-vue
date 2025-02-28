@@ -4,7 +4,7 @@ import { authApi } from '@/composables/api/auth'
 import type { LoginCredentials, SignupCredentials, User } from '@/types'
 import { ref, computed } from 'vue'
 
-const { trackEvent,trackIdentify } = useEventTracking()
+//const { trackEvent,trackIdentify } = useEventTracking()
 
 export const useAuthStore = defineStore('auth', () => {
   
@@ -97,33 +97,32 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
   
-  async function login(payload: LoginCredentials) {
-    loading.value = true
-    error.value = null
-    
+  const login = async (credentials: LoginCredentials) => {
+    //const { trackEvent, trackIdentify } = useEventTracking()
     try {
-        const response = await authApi.login(payload)
-        console.log('auth store: login requested',response)
-        if (response?.access_token) {
-            setToken(response.access_token)
-            const userData = await authApi.getCurrentUser()
-            if (userData) {
-              setUser(userData)
-              
-              trackIdentify(userData.email)
-              
-              trackEvent({
-                eventName: 'User Login',
-                category: 'action',
-                properties: {
-                  'extra':false
-                }
-              })
-              
-              return true
-            }
-          }
-          return false
+      loading.value = true
+      error.value = null
+      
+      const response = await authApi.login(credentials)
+      console.log('auth store: login requested',response)
+      if (response?.access_token) {
+        setToken(response.access_token)
+        const userData = await authApi.getCurrentUser()
+        if (userData) {
+          setUser(userData)
+          
+          //await trackIdentify(userData.email)
+          
+          /*
+          await trackEvent({
+            eventName: 'user_login',
+            category: 'authentication'
+          })
+          */
+          return true
+        }
+      }
+      return false
     } catch (error: any) {
         error.value = error.response?.data?.detail || 'An error occurred during login'
         console.log('login error', error)
@@ -145,15 +144,16 @@ export const useAuthStore = defineStore('auth', () => {
             setUser(response)
 
             loading.value = false
-            trackIdentify(response.user.email)
-            trackEvent({
+            /*
+            await trackIdentify(response.user.email)
+            await trackEvent({
               eventName: 'User Signup',
               category: 'action',
               properties: {
                 'extra':false
               }
             })
-
+            */
             return true
         }
         loading.value = false
