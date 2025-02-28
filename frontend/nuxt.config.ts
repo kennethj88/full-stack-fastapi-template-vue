@@ -1,56 +1,44 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  /*devtools: {
-    enabled: false,
-
-    timeline: {
-      enabled: false
-    }
-  },*/
+  compatibilityDate: '2024-11-01',
+  devtools: { enabled: true },
   modules: [
     '@pinia/nuxt',
     '@vueuse/nuxt',
-   // '@nuxtjs/tailwindcss',
     '@nuxt/icon',
     '@nuxtjs/color-mode',
-   //  '@nuxtjs/google-fonts',
-   /*["@sentry/nuxt/module", {
-      sourceMapsUploadOptions: {
-        org: "bongodaa",
-        project: "bongolocal",
-        authToken: process.env.SENTRY_AUTH_TOKEN,
-      },
-      sourcemap: {
-        hidden: true,
-      },
-      client: {
-        tracesSampleRate: 1.0,
-        replaysSessionSampleRate: 0.1,
-        replaysOnErrorSampleRate: 1.0,
-      },
-      server: {
-        disabled: true
-      }
-    }] */
+    '@nuxtjs/tailwindcss',
+    '@nuxt/image',
+    '@sentry/nuxt/module'
   ],
-  //@ts-ignore
-  googleFonts: {
-    families: {
-      'DM+Sans': {
-        wght: ['400', '500', '600', '700', '800', '1000'],
-      }
-    },
-    display: 'swap',
-    preload: true,
-    download: true, // Add this to download fonts instead of using CDN
-    base64: false, // Keep this false for better caching
-  },
   imports: {
     dirs: ['stores']
   },
   pinia: {
     storesDirs: ['./stores/**'],
   },
+  //css: ['~/assets/css/main.css'],
+  css: ['~/assets/css/tailwind.css'],
+  tailwindcss: {
+    viewer: { endpoint: '/_tailwind', exportViewer: true },
+    cssPath: ['~/assets/css/tailwind.css', { injectPosition: "first" }],
+    exposeConfig: true,
+    editorSupport: true
+    // and more...
+  },
+  
+  postcss: {
+    plugins: {
+      'postcss-import': {
+        // This disables the rule for @import statements position
+        skipDuplicates: false,
+        path: ['~/assets/css/'],
+        order: false
+      },
+      // Other plugins like tailwindcss, autoprefixer, etc.
+    }
+  },
+  
   typescript: {
     strict: true,
     typeCheck: true,
@@ -66,46 +54,55 @@ export default defineNuxtConfig({
       // Add other tracking-related config here
     }
   },
-  colorMode: {
-    classSuffix: ''
-  },
-  css: [
- //   '@/assets/css/tailwind.css'
-  ],
- /* tailwindcss: {
-    cssPath: '@/assets/css/tailwind.css',
-    configPath: './tailwind.config.ts',
-    exposeConfig: false,
-    viewer: true,
-  },*/
   app: {
     head: {
       title: 'FastAPI + Nuxt3 Starter',
       meta: [
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' }
+      ],
+      script: [
+        {
+          src: 'https://cloud.umami.is/script.js',
+          'data-website-id': process.env.UMAMI_WEBSITE_ID,
+          async: true,
+          defer: true
+        }
       ]
     }
   },
-  routeRules: {
-   // '/dashboard/**': { ssr: false },
-   // '/zero/': { ssr: false },
+  colorMode: {
+    classSuffix: ''
   },
+  routeRules: {
+    '/**': { ssr: false },
+    // '/zero/': { ssr: false },
+   },
   nitro: {
-    prerender: {
-      routes: ['/'],
-      crawlLinks: true,
-      failOnError: false,
-    },
     routeRules: {
       '/_nuxt/**': {
         headers: {
-          'Cache-Control': process.env.NODE_ENV === 'development' 
+          'Cache-Control': process.env.NODE_ENV === 'development'
             ? 'no-store, no-cache, must-revalidate, proxy-revalidate'
             : 'public, max-age=31536000, immutable'
         }
-      }
-    }
+      },
+      //'/_nuxt/assets/**/*.css': { // Use a wildcard to match any CSS file under /_nuxt/assets/
+      //  headers: {
+      //    'Content-Type': process.env.NODE_ENV === 'development' ? 'text/javascript; charset=utf-8' : 'text/css; charset=utf-8', // Corrected MIME type for CSS
+       //   'X-Content-Type-Options': 'nosniff'
+      //  }
+     // },
   },
-  
+},
+experimental: {
+    //inlineSSRStyles: false,
+    viewTransition: true,
+    renderJsonPayloads: true
+  }
 })
+
+
+/*
+     */
+    //rm -f /tmp/nitro/worker-40-2.sock

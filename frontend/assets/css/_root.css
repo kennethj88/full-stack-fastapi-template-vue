@@ -10,5 +10,6 @@
 }
 
 body {
+    background-color: blue;
     font-family: var(--body-font-family), serif;
 }

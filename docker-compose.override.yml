@@ -48,6 +48,11 @@ services:
     environment:
       HOST: 0.0.0.0
       NODE_ENV: development
+      SENTRY_DSN: ${SENTRY_DSN}
+      GOOGLE_CLIENT_ID: {$GOOGLE_CLIENT_ID}
+      GOOGLE_REDIRECT_URI: {$GOOGLE_REDIRECT_URI}
+      KLAVIYO_API_KEY: {$KLAVIYO_API_KEY}
+      UMAMI_WEBSITE_ID: ${UMAMI_WEBSITE_ID}
     volumes:
       - ./frontend:/app
   playwright:

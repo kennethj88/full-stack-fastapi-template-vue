@@ -1,7 +1,14 @@
-export default {
+module.exports = {
   plugins: {
+    'postcss-import': {
+      // This disables the rule for @import statements position
+      skipDuplicates: false,
+      path: ['./assets/css/*'],
+      order: false
+    },
+    'tailwindcss/nesting': {},
     tailwindcss: {},
     autoprefixer: {},
-    'postcss-import': {},
-  },
-} 
+    // Any other plugins you're using
+  }
+}

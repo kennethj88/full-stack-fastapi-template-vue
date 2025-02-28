@@ -1,4 +1,3 @@
-/*
 import type { TrackingEvent } from '~/types/tracking'
 
 export const useEventTracking = () => {
@@ -31,4 +30,3 @@ export const useEventTracking = () => {
   }
 } 
 
-*/

@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref, reactive, onMounted} from 'vue'
 import { useAuthStore } from '~/stores/auth'
-import logo from '@/public/assets/images/fastapi-logo.svg'
 import GoogleButton from './GoogleButton.vue'
 import BaseInput from '~/components/ui/BaseInput.vue'
 

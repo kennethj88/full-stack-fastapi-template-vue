@@ -6,15 +6,17 @@
   
 <script setup lang="ts">
   import { ref } from 'vue'
-  import LoginForm from '@/components/auth/LoginForm.vue'
-  import logo from '@/public/assets/images/fastapi-logo.svg'
+  //import LoginForm from '@/components/auth/LoginForm.vue'
   
+  definePageMeta({
+    layout: 'default'
+  })
 
 
 </script>
   
 <style>
-  /* Add your styles here */
+/* Add your styles here */
   #app {
     display: flex;
     justify-content: center;
@@ -22,3 +24,4 @@
     height: 100vh;
   }
 </style>
+ 

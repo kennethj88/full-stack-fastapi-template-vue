@@ -42,7 +42,7 @@
                   <li class="flex gap-4 items-start">
                     <div class="avatar">
                       <div class="w-10 h-10 rounded-full">
-                        <img src="/assets/public/assets/images/avatars/1.png" alt="avatar" />
+                        <NuxtImg src="/base_template/images/avatars/1.png" alt="avatar" />
                       </div>
                     </div>
                     <div class="flex-1">
@@ -54,7 +54,7 @@
                   <li class="flex gap-4 items-start">
                     <div class="avatar">
                       <div class="w-10 h-10 rounded-full">
-                        <img src="/assets/public/assets/images/avatars/2.png" alt="avatar" />
+                        <NuxtImg src="/base_template/images/avatars/2.png" alt="avatar" />
                       </div>
                     </div>
                     <div class="flex-1">
@@ -65,7 +65,7 @@
                   <li class="flex gap-4 items-start">
                     <div class="avatar">
                       <div class="w-10 h-10 rounded-full">
-                        <img src="/assets/public/assets/images/avatars/3.png" alt="avatar" />
+                        <NuxtImg src="/base_template/images/avatars/3.png" alt="avatar" />
                       </div>
                     </div>
                     <div class="flex-1">
@@ -85,7 +85,7 @@
               <div class="flex items-center gap-2">
                 <div class="avatar">
                   <div class="mask mask-squircle w-[30px] h-[30px]">
-                    <img src="/assets/public/assets/images/avatars/1.png" alt="Avatar" />
+                    <NuxtImg src="/base_template/images/avatars/1.png" alt="Avatar" />
                   </div>
                 </div>
                 <div class="flex flex-col items-start">
@@ -132,8 +132,8 @@
         <NuxtLink to="/dashboard" class="flex h-16 items-center justify-center">
           <!-- Logo section -->
           <div class="inline">
-            <img alt="logo-dark" loading="lazy" class="hidden h-6 dark:inline" src="/assets/public/assets/images/logo/logo-dark.png" />
-            <img alt="logo-light" loading="lazy" class="inline h-6 dark:hidden" src="/assets/public/assets/images/logo/logo-light.png" />
+            <NuxtImg alt="logo-dark" loading="lazy" class="hidden h-6 dark:inline" src="/base_template/images/logo/logo-dark.png" />
+            <NuxtImg alt="logo-light" loading="lazy" class="inline h-6 dark:hidden" src="/base_template/images/logo/logo-light.png" />
           </div>
         </NuxtLink>
 

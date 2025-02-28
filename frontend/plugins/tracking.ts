@@ -1,4 +1,3 @@
-/*
 import type { TrackingEvent } from '~/types/tracking'
 
 export default defineNuxtPlugin((nuxtApp) => {
@@ -80,5 +79,3 @@ export default defineNuxtPlugin((nuxtApp) => {
         }
     }
 }) 
-
-*/
